@@ -9,10 +9,12 @@ import {
   FluentProvider,
   webLightTheme,
   Text,
+  Button,
 } from "@fluentui/react-components";
 import FilterBar from "./FilterBar";
 import ColleagueGrid from "./ColleagueGrid";
 import { saveProfile } from "../functions/saveProfile";
+import { EditRegular } from "@fluentui/react-icons";
 
 const Smoelenboek = (props: ISmoelenboekProps) => {
   const [colleagues, setColleagues] = useState<IColleague[]>([]);
@@ -58,9 +60,32 @@ const Smoelenboek = (props: ISmoelenboekProps) => {
   return (
     <FluentProvider theme={webLightTheme}>
       <div style={{ padding: "20px" }}>
-        <Text size={800} weight="bold">
-          Smoelenboek StudioM
-        </Text>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            alignItems: "center",
+          }}
+        >
+          <Text size={800} weight="bold">
+            Smoelenboek StudioM
+          </Text>
+          <Button
+            icon={<EditRegular />}
+            onClick={() =>
+              saveProfile(
+                props,
+                null,
+                props.context.pageContext.user.email,
+                "",
+                [],
+              )
+            }
+          >
+            Edit your profile
+          </Button>
+        </div>
         <FilterBar
           search={search}
           setSearch={setSearch}

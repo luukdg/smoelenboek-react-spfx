@@ -14,20 +14,36 @@ export const saveProfile = async (
     Skills: skills,
   });
 
-  console.log("📤 Sending body:", body); // 👈 check what we're sending
-
-  const response = await props.context.spHttpClient.post(
-    `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items`,
-    SPHttpClient.configurations.v1,
-    {
-      headers: {
-        Accept: "application/json", // 👈 simplified
-        "Content-Type": "application/json;odata=nometadata",
+  if (profileId) {
+    // Update existing profile
+    await props.context.spHttpClient.fetch(
+      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items(${profileId})`,
+      SPHttpClient.configurations.v1,
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;odata=nometadata",
+          "IF-MATCH": "*",
+          "X-HTTP-Method": "MERGE",
+        },
+        body,
       },
-      body,
-    },
-  );
-
-  const result = await response.json();
-  console.log("📥 Response:", result); // 👈 check what SharePoint returns
+    );
+    console.log("Profile exists already");
+  } else {
+    // Create new profile
+    await props.context.spHttpClient.post(
+      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items`,
+      SPHttpClient.configurations.v1,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;odata=nometadata",
+        },
+        body,
+      },
+    );
+    console.log("Profile created");
+  }
 };
