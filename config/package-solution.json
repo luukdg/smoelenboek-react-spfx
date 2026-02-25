@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "smoelenboek-webpart-client-side-solution",
+    "id": "09eca29d-3cac-45f1-bf27-4d20472163c5",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.22.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "smoelenboek-webpart description"
+      },
+      "longDescription": {
+        "default": "smoelenboek-webpart description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "smoelenboek-webpart Feature",
+        "description": "The feature that activates elements of the smoelenboek-webpart solution.",
+        "id": "97d52453-3427-4712-bdd3-d1b4b6acdc99",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/smoelenboek-webpart.sppkg"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "useGulp": false,
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.15.0",
+    "sdksVersions": {},
+    "version": "1.22.2",
+    "libraryName": "smoelenboek-webpart",
+    "libraryId": "09eca29d-3cac-45f1-bf27-4d20472163c5",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "smoelenboek-webpart",
+    "solutionShortDescription": "smoelenboek-webpart description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
