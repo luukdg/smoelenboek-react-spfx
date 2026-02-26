@@ -8,6 +8,9 @@ export const saveProfile = async (
   personalnote: string,
   skills: string[],
 ): Promise<void> => {
+  console.log("ProfileId received:", profileId);
+  console.log("Email received:", email);
+
   const body = JSON.stringify({
     Email: email,
     Personalnote: personalnote,
@@ -30,7 +33,7 @@ export const saveProfile = async (
         body,
       },
     );
-    console.log("Profile exists already");
+    console.log("Profile updated!");
   } else {
     // Create new profile
     await props.context.spHttpClient.post(

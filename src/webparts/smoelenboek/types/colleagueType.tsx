@@ -7,4 +7,5 @@ export interface IColleague {
     EMail: string;
   };
   Personalnote: string;
+  ProfileId?: number | null;
 }

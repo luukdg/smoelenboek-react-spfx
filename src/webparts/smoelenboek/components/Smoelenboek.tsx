@@ -9,12 +9,11 @@ import {
   FluentProvider,
   webLightTheme,
   Text,
-  Button,
 } from "@fluentui/react-components";
 import FilterBar from "./FilterBar";
 import ColleagueGrid from "./ColleagueGrid";
-import { saveProfile } from "../functions/saveProfile";
-import { EditRegular } from "@fluentui/react-icons";
+import EditProfileDialog from "./editProfileDialog";
+import { getAvailableSkills } from "../functions/getAvailableSkills";
 
 const Smoelenboek = (props: ISmoelenboekProps) => {
   const [colleagues, setColleagues] = useState<IColleague[]>([]);
@@ -22,10 +21,12 @@ const Smoelenboek = (props: ISmoelenboekProps) => {
   const [search, setSearch] = useState<string>("");
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [availableSkills, setAvailableSkills] = useState<string[]>([]);
 
   useEffect(() => {
     getColleagueList(props, setColleagues);
     getProfileList(props, setProfiles);
+    getAvailableSkills(props).then(setAvailableSkills);
   }, []);
 
   const combined = colleagues.map((colleague) => {
@@ -34,6 +35,7 @@ const Smoelenboek = (props: ISmoelenboekProps) => {
       ...colleague,
       Personalnote: profile?.Personalnote || "",
       Skills: profile?.Skills || [],
+      ProfileId: profile?.Id || null,
     };
   });
 
@@ -57,6 +59,15 @@ const Smoelenboek = (props: ISmoelenboekProps) => {
     return matchesName && matchesRole && matchesSkills;
   });
 
+  const currentUserEmail = props.context.pageContext.user.email;
+  const myProfile = combined.find(
+    (c) => c.Name?.EMail?.toLowerCase() === currentUserEmail?.toLowerCase(),
+  );
+
+  const refreshProfiles = () => {
+    getProfileList(props, setProfiles);
+  };
+
   return (
     <FluentProvider theme={webLightTheme}>
       <div style={{ padding: "20px" }}>
@@ -71,20 +82,16 @@ const Smoelenboek = (props: ISmoelenboekProps) => {
           <Text size={800} weight="bold">
             Smoelenboek StudioM
           </Text>
-          <Button
-            icon={<EditRegular />}
-            onClick={() =>
-              saveProfile(
-                props,
-                null,
-                props.context.pageContext.user.email,
-                "",
-                [],
-              )
-            }
-          >
-            Edit your profile
-          </Button>
+
+          <EditProfileDialog
+            spProps={props}
+            profileId={myProfile?.ProfileId || null}
+            email={currentUserEmail}
+            currentNote={myProfile?.Personalnote || ""}
+            currentSkills={myProfile?.Skills || []}
+            availableSkills={availableSkills}
+            onSaved={refreshProfiles}
+          />
         </div>
         <FilterBar
           search={search}

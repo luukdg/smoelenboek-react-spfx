@@ -49,7 +49,7 @@ const ColleagueCard = ({ colleague }: IColleagueCardProps) => {
           }}
         >
           <>
-            <strong>Over mij:</strong>
+            <strong>About me:</strong>
             <div>{colleague.Personalnote}</div>
           </>
         </div>
