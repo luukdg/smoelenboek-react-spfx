@@ -6,17 +6,46 @@ import {
   Avatar,
   Text,
   Badge,
+  makeStyles,
 } from "@fluentui/react-components";
 import { IColleague } from "../types/colleagueType";
 import { getPhotoUrl } from "../functions/getPhotoUrl";
 
+const useStyles = makeStyles({
+  card: {
+    display: "flex",
+    animationName: {
+      from: {
+        opacity: "0",
+        transform: "translateY(16px)",
+      },
+      to: {
+        opacity: "1",
+        transform: "translateY(0)",
+      },
+    },
+    animationDuration: "0.3s",
+    animationTimingFunction: "ease-out",
+    animationFillMode: "both",
+  },
+});
+
 interface IColleagueCardProps {
   colleague: IColleague;
+  index?: number;
 }
 
-const ColleagueCard = ({ colleague }: IColleagueCardProps) => {
+const ColleagueCard = ({
+  colleague,
+  index = 0,
+}: IColleagueCardProps): JSX.Element => {
+  const styles = useStyles();
+
   return (
-    <Card style={{ display: "flex" }}>
+    <Card
+      className={styles.card}
+      style={{ animationDelay: `${index * 0.05}s`, display: "flex" }}
+    >
       <CardHeader
         image={
           <Avatar

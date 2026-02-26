@@ -21,7 +21,7 @@ import { saveProfile } from "../functions/saveProfile";
 
 interface IEditProfileDialogProps {
   spProps: ISmoelenboekProps;
-  profileId: number | null;
+  profileId: number | undefined;
   email: string;
   currentNote: string;
   currentSkills: string[];
@@ -37,7 +37,7 @@ const EditProfileDialog = ({
   currentSkills,
   availableSkills,
   onSaved,
-}: IEditProfileDialogProps) => {
+}: IEditProfileDialogProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState(currentNote || "");
   const [selectedSkills, setSelectedSkills] = useState<string[]>(
@@ -45,7 +45,7 @@ const EditProfileDialog = ({
   );
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     setSaving(true);
     await saveProfile(spProps, profileId, email, note, selectedSkills);
     setSaving(false);
@@ -53,7 +53,7 @@ const EditProfileDialog = ({
     onSaved();
   };
 
-  const toggleSkill = (skill: string) => {
+  const toggleSkill = (skill: string): void => {
     setSelectedSkills((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill],
     );
@@ -69,7 +69,7 @@ const EditProfileDialog = ({
       <Dialog open={open} onOpenChange={(e, data) => setOpen(data.open)}>
         <DialogTrigger disableButtonEnhancement>
           <Button appearance="primary" size="small" icon={<EditRegular />}>
-            Edit profile
+            Edit your profile
           </Button>
         </DialogTrigger>
         <DialogSurface style={{ backgroundColor: "white" }}>

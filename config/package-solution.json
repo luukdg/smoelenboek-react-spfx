@@ -1,14 +1,14 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "smoelenboek-webpart-client-side-solution",
+    "name": "StudioM Smoelenboek",
     "id": "09eca29d-3cac-45f1-bf27-4d20472163c5",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
+      "name": "StudioM",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",

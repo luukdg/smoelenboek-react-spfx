@@ -12,11 +12,11 @@ const FilterBar = ({
   setSelectedSkills,
   roles,
   skills,
-}: IFilterBarProps) => {
+}: IFilterBarProps): JSX.Element => {
   const hasFilters =
     selectedRoles.length > 0 || selectedSkills.length > 0 || search !== "";
 
-  const clearFilters = () => {
+  const clearFilters = (): void => {
     setSelectedRoles([]);
     setSelectedSkills([]);
     setSearch("");
@@ -26,6 +26,7 @@ const FilterBar = ({
     <div
       style={{
         display: "flex",
+        flexWrap: "wrap",
         gap: "10px",
         flexDirection: "row",
         alignItems: "center",

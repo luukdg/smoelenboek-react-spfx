@@ -3,7 +3,7 @@ import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 
 export const saveProfile = async (
   props: ISmoelenboekProps,
-  profileId: number | null,
+  profileId: number | undefined,
   email: string,
   personalnote: string,
   skills: string[],

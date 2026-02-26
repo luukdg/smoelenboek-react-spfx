@@ -6,7 +6,7 @@ interface IColleagueGridProps {
   colleagues: IColleague[];
 }
 
-const ColleagueGrid = ({ colleagues }: IColleagueGridProps) => {
+const ColleagueGrid = ({ colleagues }: IColleagueGridProps): JSX.Element => {
   return (
     <div
       style={{
@@ -16,8 +16,12 @@ const ColleagueGrid = ({ colleagues }: IColleagueGridProps) => {
         marginTop: "20px",
       }}
     >
-      {colleagues.map((colleague) => (
-        <ColleagueCard key={colleague.Name?.EMail} colleague={colleague} />
+      {colleagues.map((colleague, index) => (
+        <ColleagueCard
+          key={colleague.Name?.EMail}
+          colleague={colleague}
+          index={index}
+        />
       ))}
     </div>
   );
