@@ -18,6 +18,7 @@ import {
 import { EditRegular } from "@fluentui/react-icons";
 import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 import { saveProfile } from "../functions/saveProfile";
+import { uploadProfilePhoto } from "../functions/uploadProfilePhoto";
 
 interface IEditProfileDialogProps {
   spProps: ISmoelenboekProps;
@@ -26,6 +27,7 @@ interface IEditProfileDialogProps {
   currentNote: string;
   currentSkills: string[];
   availableSkills: string[];
+  currentPhoto?: string;
   onSaved: () => void;
 }
 
@@ -36,6 +38,7 @@ const EditProfileDialog = ({
   currentNote,
   currentSkills,
   availableSkills,
+  currentPhoto,
   onSaved,
 }: IEditProfileDialogProps): JSX.Element => {
   const [open, setOpen] = useState(false);
@@ -44,9 +47,16 @@ const EditProfileDialog = ({
     currentSkills || [],
   );
   const [saving, setSaving] = useState(false);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string>(currentPhoto || "");
 
   const handleSave = async (): Promise<void> => {
     setSaving(true);
+
+    if (photoFile && profileId) {
+      await uploadProfilePhoto(spProps, profileId, photoFile, currentPhoto);
+    }
+
     await saveProfile(spProps, profileId, email, note, selectedSkills);
     setSaving(false);
     setOpen(false);
@@ -57,6 +67,14 @@ const EditProfileDialog = ({
     setSelectedSkills((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill],
     );
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file)); // preview before saving
+    }
   };
 
   useEffect(() => {
@@ -118,6 +136,7 @@ const EditProfileDialog = ({
                       flexWrap: "wrap",
                       gap: "4px",
                       marginTop: "4px",
+                      marginBottom: "8px",
                     }}
                   >
                     {availableSkills.map((skill, i) => (
@@ -129,6 +148,44 @@ const EditProfileDialog = ({
                       />
                     ))}
                   </div>
+                </div>
+              </div>
+              <div>
+                <strong>Profile photo</strong>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    marginTop: "8px",
+                  }}
+                >
+                  {photoPreview && (
+                    <img
+                      src={photoPreview}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  )}
+                  <Button
+                    appearance="secondary"
+                    onClick={() =>
+                      document.getElementById("photoUpload")?.click()
+                    }
+                  >
+                    Upload photo
+                  </Button>
+                  <input
+                    id="photoUpload"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handlePhotoChange}
+                  />
                 </div>
               </div>
             </DialogContent>

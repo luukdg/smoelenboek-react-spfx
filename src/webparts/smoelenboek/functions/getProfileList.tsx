@@ -6,10 +6,21 @@ export const getProfileList = async (
   props: ISmoelenboekProps,
   setProfiles: (profiles: IProfile[]) => void,
 ): Promise<void> => {
-  const response = await props.context.spHttpClient.get(
-    `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items?$select=Id,Email,Personalnote,Skills`,
-    SPHttpClient.configurations.v1,
-  );
-  const data = await response.json();
-  setProfiles(data.value);
+  try {
+    const response = await props.context.spHttpClient.get(
+      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items?$select=Id,Email,Personalnote,Skills,Profilephoto`,
+      SPHttpClient.configurations.v1,
+    );
+
+    if (!response.ok) {
+      console.error("Error fetching profiles:", response.status);
+      return;
+    }
+
+    const data = await response.json();
+    console.log("Fetched profiles:", data.value);
+    setProfiles(data.value ?? []);
+  } catch (err) {
+    console.error("Error fetching profiles:", err);
+  }
 };

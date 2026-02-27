@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react-components";
 import { IColleague } from "../types/colleagueType";
 import { getPhotoUrl } from "../functions/getPhotoUrl";
+import { parseProfilePhoto } from "../functions/parseProfilePhoto";
 
 const useStyles = makeStyles({
   card: {
@@ -50,7 +51,11 @@ const ColleagueCard = ({
         image={
           <Avatar
             name={colleague.Name?.Title}
-            image={{ src: getPhotoUrl(colleague.Name?.EMail) }}
+            image={{
+              src: colleague.Profilephoto
+                ? parseProfilePhoto(colleague.Profilephoto)
+                : getPhotoUrl(colleague.Name?.EMail),
+            }}
             size={48}
           />
         }
@@ -58,10 +63,10 @@ const ColleagueCard = ({
         description={
           <div>
             <Text size={200} block>
-              {colleague.Role}
+              {colleague.Name?.JobTitle || "No job title"}
             </Text>
             <Text size={200} style={{ color: "#605E5C" }} block>
-              {colleague.Beschikbaarheid}
+              {colleague.Location}
             </Text>
           </div>
         }

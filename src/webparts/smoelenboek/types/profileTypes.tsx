@@ -3,4 +3,5 @@ export interface IProfile {
   Email: string;
   Personalnote: string;
   Skills: string[];
+  Profilephoto: string;
 }

@@ -28,6 +28,7 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
     myProfile,
     refreshProfiles,
     filterKey,
+    isInDirectory,
   } = useSmoelenboek(props);
 
   if (loading) {
@@ -54,15 +55,18 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           <Text size={800} weight="bold">
             Smoelenboek StudioM
           </Text>
-          <EditProfileDialog
-            spProps={props}
-            profileId={myProfile?.ProfileId}
-            email={currentUserEmail}
-            currentNote={myProfile?.Personalnote || ""}
-            currentSkills={myProfile?.Skills || []}
-            availableSkills={availableSkills}
-            onSaved={refreshProfiles}
-          />
+          {isInDirectory && (
+            <EditProfileDialog
+              spProps={props}
+              profileId={myProfile?.ProfileId}
+              email={currentUserEmail}
+              currentNote={myProfile?.Personalnote || ""}
+              currentSkills={myProfile?.Skills || []}
+              currentPhoto={myProfile?.Profilephoto || ""}
+              availableSkills={availableSkills}
+              onSaved={refreshProfiles}
+            />
+          )}
         </div>
         <FilterBar
           search={search}

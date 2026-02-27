@@ -8,10 +8,11 @@ export async function getColleagueList(
 ): Promise<void> {
   try {
     const response = await props.context.spHttpClient.get(
-      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('Smoelenboek')/items?$expand=Name&$select=Role,Beschikbaarheid,Name/Title,Name/EMail`,
+      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('Smoelenboek')/items?$expand=Name&$select=Name/Title,Name/EMail,Name/JobTitle,Location`,
       SPHttpClient.configurations.v1,
     );
     const data = await response.json();
+    console.log("Fetched colleagues:", data.value);
     setColleagues(data.value);
   } catch (err) {
     console.error("Error fetching colleagues:", err);
