@@ -13,6 +13,8 @@ import {
   Checkbox,
   FluentProvider,
   webLightTheme,
+  teamsDarkTheme,
+  teamsLightTheme,
   Text,
 } from "@fluentui/react-components";
 import { EditRegular } from "@fluentui/react-icons";
@@ -83,14 +85,14 @@ const EditProfileDialog = ({
   }, [currentNote, currentSkills]);
 
   return (
-    <FluentProvider theme={webLightTheme}>
+    <FluentProvider theme={teamsDarkTheme}>
       <Dialog open={open} onOpenChange={(e, data) => setOpen(data.open)}>
         <DialogTrigger disableButtonEnhancement>
           <Button appearance="primary" size="small" icon={<EditRegular />}>
             Edit your profile
           </Button>
         </DialogTrigger>
-        <DialogSurface style={{ backgroundColor: "white" }}>
+        <DialogSurface>
           <DialogBody>
             <DialogTitle>
               <div

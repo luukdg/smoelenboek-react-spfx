@@ -5,7 +5,7 @@ export const uploadProfilePhoto = async (
   props: ISmoelenboekProps,
   profileId: number,
   file: File,
-  currentPhoto?: string, // ← add this
+  currentPhoto?: string,
 ): Promise<void> => {
   const siteUrl =
     "https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com";

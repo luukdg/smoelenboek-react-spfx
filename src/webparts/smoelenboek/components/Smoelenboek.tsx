@@ -5,6 +5,8 @@ import {
   webLightTheme,
   Text,
   Spinner,
+  teamsDarkTheme,
+  teamsLightTheme,
 } from "@fluentui/react-components";
 import FilterBar from "./FilterBar";
 import ColleagueGrid from "./ColleagueGrid";
@@ -49,7 +51,7 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
   }
 
   return (
-    <FluentProvider theme={webLightTheme}>
+    <FluentProvider theme={teamsDarkTheme}>
       <div style={{ padding: "20px" }}>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <Text size={800} weight="bold">

@@ -7,6 +7,7 @@ import {
   Text,
   Badge,
   makeStyles,
+  tokens,
 } from "@fluentui/react-components";
 import { IColleague } from "../types/colleagueType";
 import { getPhotoUrl } from "../functions/getPhotoUrl";
@@ -15,6 +16,7 @@ import { parseProfilePhoto } from "../functions/parseProfilePhoto";
 const useStyles = makeStyles({
   card: {
     display: "flex",
+    backgroundColor: tokens.colorNeutralBackground3,
     animationName: {
       from: {
         opacity: "0",
@@ -28,6 +30,17 @@ const useStyles = makeStyles({
     animationDuration: "0.3s",
     animationTimingFunction: "ease-out",
     animationFillMode: "both",
+  },
+  name: {
+    fontSize: tokens.fontSizeBase400,
+  },
+  jobTitle: {
+    fontSize: tokens.fontSizeBase300,
+    color: tokens.colorNeutralForeground2,
+  },
+  location: {
+    fontSize: tokens.fontSizeBase200,
+    color: tokens.colorNeutralForeground4,
   },
 });
 
@@ -59,13 +72,17 @@ const ColleagueCard = ({
             size={48}
           />
         }
-        header={<Text weight="semibold">{colleague.Name?.Title}</Text>}
+        header={
+          <Text className={styles.name} weight="semibold">
+            {colleague.Name?.Title}
+          </Text>
+        }
         description={
           <div>
-            <Text size={200} block>
+            <Text size={200} block className={styles.jobTitle}>
               {colleague.Name?.JobTitle || "No job title"}
             </Text>
-            <Text size={200} style={{ color: "#605E5C" }} block>
+            <Text size={200} block className={styles.location}>
               {colleague.Location}
             </Text>
           </div>
@@ -91,7 +108,7 @@ const ColleagueCard = ({
       <CardFooter>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
           {colleague.Skills?.map((skill, i) => (
-            <Badge key={i} appearance="tint">
+            <Badge key={i} appearance="filled">
               {skill}
             </Badge>
           ))}
