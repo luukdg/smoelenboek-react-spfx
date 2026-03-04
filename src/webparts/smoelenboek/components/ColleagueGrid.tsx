@@ -13,7 +13,6 @@ const ColleagueGrid = ({ colleagues }: IColleagueGridProps): JSX.Element => {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
         gap: "16px",
-        marginTop: "20px",
       }}
     >
       {colleagues.map((colleague, index) => (

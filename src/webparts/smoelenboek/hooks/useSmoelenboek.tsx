@@ -14,6 +14,8 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [availableSkills, setAvailableSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const searchActive =
+    selectedRoles.length > 0 || selectedSkills.length > 0 || search !== "";
 
   useEffect(() => {
     Promise.all([
@@ -38,12 +40,13 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
 
   const skills = [
     ...new Set(combined.flatMap((c) => c.Skills).filter(Boolean)),
-  ];
+  ].sort((a, b) => a.localeCompare(b));
+
   const roles = [
     ...new Set(
       combined.map((c) => c.Name?.JobTitle).filter((r): r is string => !!r),
     ),
-  ];
+  ].sort((a, b) => a.localeCompare(b));
 
   const filtered = combined
     .filter((c) => {
@@ -90,5 +93,6 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     refreshProfiles,
     filterKey,
     isInDirectory,
+    searchActive,
   };
 };

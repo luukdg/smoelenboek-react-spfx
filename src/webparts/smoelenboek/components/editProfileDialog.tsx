@@ -12,9 +12,6 @@ import {
   Textarea,
   Checkbox,
   FluentProvider,
-  webLightTheme,
-  teamsDarkTheme,
-  teamsLightTheme,
   Text,
 } from "@fluentui/react-components";
 import { EditRegular } from "@fluentui/react-icons";
@@ -23,6 +20,7 @@ import { saveProfile } from "../functions/saveProfile";
 import { uploadProfilePhoto } from "../functions/uploadProfilePhoto";
 
 interface IEditProfileDialogProps {
+  theme: any;
   spProps: ISmoelenboekProps;
   profileId: number | undefined;
   email: string;
@@ -34,6 +32,7 @@ interface IEditProfileDialogProps {
 }
 
 const EditProfileDialog = ({
+  theme,
   spProps,
   profileId,
   email,
@@ -85,7 +84,7 @@ const EditProfileDialog = ({
   }, [currentNote, currentSkills]);
 
   return (
-    <FluentProvider theme={teamsDarkTheme}>
+    <FluentProvider theme={theme}>
       <Dialog open={open} onOpenChange={(e, data) => setOpen(data.open)}>
         <DialogTrigger disableButtonEnhancement>
           <Button appearance="primary" size="small" icon={<EditRegular />}>

@@ -26,6 +26,7 @@ const FilterBar = ({
     <div
       style={{
         display: "flex",
+        justifyContent: "center",
         flexWrap: "wrap",
         gap: "10px",
         flexDirection: "row",

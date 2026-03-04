@@ -2,16 +2,37 @@ import * as React from "react";
 import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 import {
   FluentProvider,
-  webLightTheme,
   Text,
   Spinner,
-  teamsDarkTheme,
+  webLightTheme,
+  webDarkTheme,
   teamsLightTheme,
+  teamsDarkTheme,
+  makeStyles,
+  Divider,
 } from "@fluentui/react-components";
 import FilterBar from "./FilterBar";
 import ColleagueGrid from "./ColleagueGrid";
 import EditProfileDialog from "./editProfileDialog";
 import { useSmoelenboek } from "../hooks/useSmoelenboek";
+
+const useStyles = makeStyles({
+  mainTitle: {
+    fontWeight: "bold",
+    fontSize: "2rem",
+  },
+  divCenter: {
+    display: "flex",
+    alignItems: "center",
+
+    flexDirection: "column",
+  },
+  profileButton: {
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+  },
+});
 
 const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
   const {
@@ -31,17 +52,29 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
     refreshProfiles,
     filterKey,
     isInDirectory,
+    searchActive,
   } = useSmoelenboek(props);
+
+  const theme = props.hasTeamsContext
+    ? props.isDarkTheme
+      ? teamsDarkTheme
+      : teamsLightTheme
+    : props.isDarkTheme
+      ? webDarkTheme
+      : webLightTheme;
+
+  const styles = useStyles();
 
   if (loading) {
     return (
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider theme={theme}>
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
+            width: "100%",
           }}
         >
           <Spinner label="Loading colleagues..." />
@@ -51,14 +84,12 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
   }
 
   return (
-    <FluentProvider theme={teamsDarkTheme}>
+    <FluentProvider theme={theme}>
       <div style={{ padding: "20px" }}>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <Text size={800} weight="bold">
-            Smoelenboek StudioM
-          </Text>
-          {isInDirectory && (
+        {isInDirectory && (
+          <div className={styles.profileButton}>
             <EditProfileDialog
+              theme={theme}
               spProps={props}
               profileId={myProfile?.ProfileId}
               email={currentUserEmail}
@@ -68,7 +99,10 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
               availableSkills={availableSkills}
               onSaved={refreshProfiles}
             />
-          )}
+          </div>
+        )}
+        <div className={styles.divCenter}>
+          <Text className={styles.mainTitle}>Smoelenboek</Text>
         </div>
         <FilterBar
           search={search}
@@ -80,7 +114,13 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           roles={roles}
           skills={skills}
         />
-        <ColleagueGrid key={filterKey} colleagues={filtered} />
+
+        {searchActive && (
+          <div>
+            <Divider style={{ margin: "20px 0" }}></Divider>
+            <ColleagueGrid key={filterKey} colleagues={filtered} />
+          </div>
+        )}
       </div>
     </FluentProvider>
   );
