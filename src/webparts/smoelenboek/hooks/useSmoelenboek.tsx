@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 import { IColleague } from "../types/colleagueType";
 import { IProfile } from "../types/profileTypes";
-import { getColleagueList } from "../functions/getColleagueList";
 import { getProfileList } from "../functions/getProfileList";
 import { getAvailableSkills } from "../functions/getAvailableSkills";
+import { getColleaguesFromGraph } from "../functions/getColleagueApi";
+import { MSGraphClientV3 } from "@microsoft/sp-http";
 
 export const useSmoelenboek = (props: ISmoelenboekProps) => {
   const [colleagues, setColleagues] = useState<IColleague[]>([]);
@@ -18,14 +19,23 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     selectedRoles.length > 0 || selectedSkills.length > 0 || search !== "";
 
   useEffect(() => {
-    Promise.all([
-      getColleagueList(props, setColleagues),
-      getProfileList(props, setProfiles),
-      getAvailableSkills(props).then(setAvailableSkills),
-    ])
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    props.context.msGraphClientFactory
+      .getClient("3")
+      .then((client: MSGraphClientV3) => {
+        Promise.all([
+          getColleaguesFromGraph(client).then(setColleagues), // 👈 replaces getColleagueList
+          getProfileList(props, setProfiles),
+          getAvailableSkills(props).then(setAvailableSkills),
+        ])
+          .catch(console.error)
+          .finally(() => setLoading(false));
+      })
+      .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    console.log("Colleagues:", colleagues);
+  }, [colleagues]);
 
   const combined = colleagues.map((colleague) => {
     const profile = profiles.find((p) => p.Email === colleague.Name?.EMail);
@@ -43,9 +53,7 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
   ].sort((a, b) => a.localeCompare(b));
 
   const roles = [
-    ...new Set(
-      combined.map((c) => c.Name?.JobTitle).filter((r): r is string => !!r),
-    ),
+    ...new Set(combined.map((c) => c.Role).filter((r): r is string => !!r)),
   ].sort((a, b) => a.localeCompare(b));
 
   const filtered = combined
@@ -54,8 +62,7 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
         search === "" ||
         c.Name?.Title?.toLowerCase().includes(search.toLowerCase());
       const matchesRole =
-        selectedRoles.length === 0 ||
-        selectedRoles.includes(c.Name?.JobTitle || "");
+        selectedRoles.length === 0 || selectedRoles.includes(c.Role || "");
       const matchesSkills =
         selectedSkills.length === 0 ||
         selectedSkills.every((skill) => c.Skills.includes(skill));

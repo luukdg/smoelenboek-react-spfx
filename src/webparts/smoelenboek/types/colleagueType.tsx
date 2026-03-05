@@ -1,13 +1,15 @@
 export interface IColleague {
-  Role: string;
-  Skills: string[];
-  Location: string;
-  Name: {
+  Name?: {
     Title: string;
     EMail: string;
-    JobTitle?: string;
   };
-  Personalnote: string;
-  ProfileId?: number | undefined;
+  Role?: string;
+  Department?: string;
+  Phone?: string;
+  Location?: string;
+  GraphId?: string;
+  Personalnote?: string;
+  Skills?: string[];
+  ProfileId?: number;
   Profilephoto?: string;
 }

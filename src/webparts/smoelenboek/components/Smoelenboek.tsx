@@ -115,12 +115,10 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           skills={skills}
         />
 
-        {searchActive && (
-          <div>
-            <Divider style={{ margin: "20px 0" }}></Divider>
-            <ColleagueGrid key={filterKey} colleagues={filtered} />
-          </div>
-        )}
+        <div>
+          <Divider style={{ margin: "20px 0" }}></Divider>
+          <ColleagueGrid key={filterKey} colleagues={filtered} />
+        </div>
       </div>
     </FluentProvider>
   );

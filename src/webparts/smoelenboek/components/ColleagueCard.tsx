@@ -67,7 +67,7 @@ const ColleagueCard = ({
             image={{
               src: colleague.Profilephoto
                 ? parseProfilePhoto(colleague.Profilephoto)
-                : getPhotoUrl(colleague.Name?.EMail),
+                : getPhotoUrl(colleague.Name?.EMail ?? ""),
             }}
             size={48}
           />
@@ -80,7 +80,7 @@ const ColleagueCard = ({
         description={
           <div>
             <Text size={200} block className={styles.jobTitle}>
-              {colleague.Name?.JobTitle || "No job title"}
+              {colleague.Role || "No job title"}
             </Text>
             <Text size={200} block className={styles.location}>
               {colleague.Location}
