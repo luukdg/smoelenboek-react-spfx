@@ -6,10 +6,12 @@ import { getProfileList } from "../functions/getProfileList";
 import { getAvailableSkills } from "../functions/getAvailableSkills";
 import { getColleaguesFromGraph } from "../functions/getColleagueApi";
 import { MSGraphClientV3 } from "@microsoft/sp-http";
+import { getPresenceByIds } from "../communications/getPresencesByUserId";
 
 export const useSmoelenboek = (props: ISmoelenboekProps) => {
   const [colleagues, setColleagues] = useState<IColleague[]>([]);
   const [profiles, setProfiles] = useState<IProfile[]>([]);
+  const [presenceMap, setPresenceMap] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
@@ -23,7 +25,15 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       .getClient("3")
       .then((client: MSGraphClientV3) => {
         Promise.all([
-          getColleaguesFromGraph(client).then(setColleagues), // 👈 replaces getColleagueList
+          getColleaguesFromGraph(client).then(async (fetchedColleagues) => {
+            setColleagues(fetchedColleagues);
+
+            const userIds = fetchedColleagues
+              .map((c) => c.GraphId ?? "")
+              .filter(Boolean);
+            const presence = await getPresenceByIds(client, userIds);
+            setPresenceMap(presence);
+          }),
           getProfileList(props, setProfiles),
           getAvailableSkills(props).then(setAvailableSkills),
         ])
@@ -33,10 +43,6 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    console.log("Colleagues:", colleagues);
-  }, [colleagues]);
-
   const combined = colleagues.map((colleague) => {
     const profile = profiles.find((p) => p.Email === colleague.Name?.EMail);
     return {
@@ -45,8 +51,13 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       Skills: profile?.Skills || [],
       ProfileId: profile?.Id,
       Profilephoto: profile?.Profilephoto || "",
+      Presence: presenceMap[colleague.GraphId ?? ""] ?? "unknown",
     };
   });
+
+  useEffect(() => {
+    console.log("Colleagues:", combined);
+  }, [combined]);
 
   const skills = [
     ...new Set(combined.flatMap((c) => c.Skills).filter(Boolean)),

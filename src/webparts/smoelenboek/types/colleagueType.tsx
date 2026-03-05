@@ -12,4 +12,5 @@ export interface IColleague {
   Skills?: string[];
   ProfileId?: number;
   Profilephoto?: string;
+  Presence: string;
 }

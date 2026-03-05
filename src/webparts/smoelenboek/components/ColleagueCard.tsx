@@ -9,14 +9,20 @@ import {
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
+import { LocationRegular } from "@fluentui/react-icons";
 import { IColleague } from "../types/colleagueType";
 import { getPhotoUrl } from "../functions/getPhotoUrl";
 import { parseProfilePhoto } from "../functions/parseProfilePhoto";
+import { toPresenceStatus } from "../constants/presenceStatus";
 
 const useStyles = makeStyles({
   card: {
     display: "flex",
     backgroundColor: tokens.colorNeutralBackground3,
+    ":hover": {
+      backgroundColor: tokens.colorNeutralBackground3Hover,
+      cursor: "pointer",
+    },
     animationName: {
       from: {
         opacity: "0",
@@ -36,11 +42,11 @@ const useStyles = makeStyles({
   },
   jobTitle: {
     fontSize: tokens.fontSizeBase300,
-    color: tokens.colorNeutralForeground2,
+    color: tokens.colorNeutralForeground1,
   },
   location: {
     fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground4,
+    color: tokens.colorNeutralForeground2,
   },
 });
 
@@ -63,6 +69,9 @@ const ColleagueCard = ({
       <CardHeader
         image={
           <Avatar
+            badge={{
+              status: toPresenceStatus(colleague.Presence ?? "unknown"),
+            }}
             name={colleague.Name?.Title}
             image={{
               src: colleague.Profilephoto
@@ -78,13 +87,11 @@ const ColleagueCard = ({
           </Text>
         }
         description={
-          <div>
-            <Text size={200} block className={styles.jobTitle}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Text className={styles.jobTitle}>
               {colleague.Role || "No job title"}
             </Text>
-            <Text size={200} block className={styles.location}>
-              {colleague.Location}
-            </Text>
+            <Text className={styles.location}>{colleague.Location}</Text>
           </div>
         }
       />
