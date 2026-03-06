@@ -15,6 +15,8 @@ import FilterBar from "./FilterBar";
 import ColleagueGrid from "./ColleagueGrid";
 import EditProfileDialog from "./editProfileDialog";
 import { useSmoelenboek } from "../hooks/useSmoelenboek";
+import logoLight from "../assets/StudioM_WPPMediaBrand_black.png";
+import logoDark from "../assets/StudioM_WPPMediaBrand_white.png";
 
 const useStyles = makeStyles({
   mainTitle: {
@@ -53,6 +55,8 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
     filterKey,
     isInDirectory,
     searchActive,
+    selectedLocation,
+    setSelectedLocation,
   } = useSmoelenboek(props);
 
   const theme = props.hasTeamsContext
@@ -62,6 +66,8 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
     : props.isDarkTheme
       ? webDarkTheme
       : webLightTheme;
+
+  const logo = props.isDarkTheme ? logoDark : logoLight;
 
   const styles = useStyles();
 
@@ -85,7 +91,9 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
 
   return (
     <FluentProvider theme={theme}>
-      <div style={{ padding: "20px" }}>
+      <div
+        style={{ padding: "20px", position: "relative", minHeight: "100vh" }}
+      >
         {isInDirectory && (
           <div className={styles.profileButton}>
             <EditProfileDialog
@@ -102,7 +110,11 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           </div>
         )}
         <div className={styles.divCenter}>
-          <Text className={styles.mainTitle}>Smoelenboek</Text>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "300px", height: "auto" }}
+          />
         </div>
         <FilterBar
           search={search}
@@ -113,6 +125,8 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           setSelectedSkills={setSelectedSkills}
           roles={roles}
           skills={skills}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
         />
 
         <div>

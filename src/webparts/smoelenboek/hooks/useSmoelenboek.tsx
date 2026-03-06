@@ -16,9 +16,13 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [availableSkills, setAvailableSkills] = useState<string[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const searchActive =
-    selectedRoles.length > 0 || selectedSkills.length > 0 || search !== "";
+    selectedRoles.length > 0 ||
+    selectedSkills.length > 0 ||
+    selectedLocation.length > 0 ||
+    search !== "";
 
   useEffect(() => {
     props.context.msGraphClientFactory
@@ -77,7 +81,10 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       const matchesSkills =
         selectedSkills.length === 0 ||
         selectedSkills.every((skill) => c.Skills.includes(skill));
-      return matchesName && matchesRole && matchesSkills;
+      const matchesLocation =
+        selectedLocation.length === 0 ||
+        selectedLocation.includes(c.Location || "");
+      return matchesName && matchesRole && matchesSkills && matchesLocation;
     })
     .sort((a, b) => (a.Name?.Title ?? "").localeCompare(b.Name?.Title ?? ""));
 
@@ -92,7 +99,7 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     getProfileList(props, setProfiles).catch(console.error);
   };
 
-  const filterKey = `${selectedRoles.join(",")}|${selectedSkills.join(",")}`;
+  const filterKey = `${selectedRoles.join(",")}|${selectedSkills.join(",")}|${selectedLocation.join(",")}`;
 
   return {
     loading,
@@ -112,5 +119,7 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     filterKey,
     isInDirectory,
     searchActive,
+    selectedLocation,
+    setSelectedLocation,
   };
 };

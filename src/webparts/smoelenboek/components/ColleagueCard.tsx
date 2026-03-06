@@ -9,7 +9,6 @@ import {
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
-import { LocationRegular } from "@fluentui/react-icons";
 import { IColleague } from "../types/colleagueType";
 import { getPhotoUrl } from "../functions/getPhotoUrl";
 import { parseProfilePhoto } from "../functions/parseProfilePhoto";

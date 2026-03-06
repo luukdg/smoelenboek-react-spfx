@@ -2,6 +2,7 @@ import * as React from "react";
 import { Input, Select, Button } from "@fluentui/react-components";
 import { DismissRegular } from "@fluentui/react-icons";
 import { IFilterBarProps } from "../types/filterTypes";
+import { locations } from "../constants/location";
 
 const FilterBar = ({
   search,
@@ -12,13 +13,19 @@ const FilterBar = ({
   setSelectedSkills,
   roles,
   skills,
+  selectedLocation,
+  setSelectedLocation,
 }: IFilterBarProps): JSX.Element => {
   const hasFilters =
-    selectedRoles.length > 0 || selectedSkills.length > 0 || search !== "";
+    selectedRoles.length > 0 ||
+    selectedSkills.length > 0 ||
+    selectedLocation.length > 0 ||
+    search !== "";
 
   const clearFilters = (): void => {
     setSelectedRoles([]);
     setSelectedSkills([]);
+    setSelectedLocation([]);
     setSearch("");
   };
 
@@ -32,7 +39,7 @@ const FilterBar = ({
         flexDirection: "row",
         alignItems: "center",
         marginBottom: "10px",
-        marginTop: "20px",
+        marginTop: "10px",
       }}
     >
       <Input
@@ -59,7 +66,6 @@ const FilterBar = ({
           </option>
         ))}
       </Select>
-
       <Select
         value={selectedSkills[0] || ""}
         onChange={(e) => {
@@ -69,7 +75,7 @@ const FilterBar = ({
           setSelectedSkills(selected);
         }}
       >
-        <option value="" disabled>
+        <option value="" disabled selected>
           Filter on skills...
         </option>
         {skills.map((skill, i) => (
@@ -78,15 +84,27 @@ const FilterBar = ({
           </option>
         ))}
       </Select>
-      {hasFilters && (
-        <Button
-          appearance="subtle"
-          icon={<DismissRegular />}
-          onClick={clearFilters}
-        >
-          Clear filters
-        </Button>
-      )}
+      <Select
+        value={selectedLocation[0] || ""}
+        onChange={(e) => setSelectedLocation([e.target.value])}
+      >
+        <option value="" disabled selected>
+          Filter on location...
+        </option>
+        {locations.map((location) => (
+          <option key={location} value={location}>
+            {location}
+          </option>
+        ))}
+      </Select>
+
+      <Button
+        appearance="subtle"
+        icon={<DismissRegular />}
+        onClick={clearFilters}
+      >
+        Clear filters
+      </Button>
     </div>
   );
 };
