@@ -1,7 +1,8 @@
 declare interface ISmoelenboekWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  SharepointListLabel: string;
+  StudioMFilterLabel: string;
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;
   AppLocalEnvironmentOffice: string;
@@ -13,7 +14,7 @@ declare interface ISmoelenboekWebPartStrings {
   UnknownEnvironment: string;
 }
 
-declare module 'SmoelenboekWebPartStrings' {
+declare module "SmoelenboekWebPartStrings" {
   const strings: ISmoelenboekWebPartStrings;
   export = strings;
 }

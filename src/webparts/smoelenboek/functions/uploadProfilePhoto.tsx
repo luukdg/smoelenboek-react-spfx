@@ -7,14 +7,11 @@ export const uploadProfilePhoto = async (
   file: File,
   currentPhoto?: string,
 ): Promise<void> => {
-  const siteUrl =
-    "https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com";
-
   // 1. Delete previous attachment if exists
   if (currentPhoto) {
     const oldFileName = currentPhoto.split("/").pop();
     await props.context.spHttpClient.post(
-      `${siteUrl}/_api/web/lists/getbytitle('SmoelenboekProfile')/items(${profileId})/AttachmentFiles/getByFileName('${oldFileName}')`,
+      `${props.siteUrl}/_api/web/lists/getbytitle('${props.listName}')/items(${profileId})/AttachmentFiles/getByFileName('${oldFileName}')`,
       SPHttpClient.configurations.v1,
       {
         headers: {
@@ -29,15 +26,15 @@ export const uploadProfilePhoto = async (
   // 2. Upload new attachment
   const arrayBuffer = await file.arrayBuffer();
   await props.context.spHttpClient.post(
-    `${siteUrl}/_api/web/lists/getbytitle('SmoelenboekProfile')/items(${profileId})/AttachmentFiles/add(FileName='${file.name}')`,
+    `${props.siteUrl}/_api/web/lists/getbytitle('${props.listName}')/items(${profileId})/AttachmentFiles/add(FileName='${file.name}')`,
     SPHttpClient.configurations.v1,
     { body: arrayBuffer as unknown as string },
   );
 
   // 3. Save the URL to Profilephoto column
-  const photoUrl = `${siteUrl}/Lists/SmoelenboekProfile/Attachments/${profileId}/${file.name}`;
+  const photoUrl = `${props.siteUrl}/Lists/${props.listName}/Attachments/${profileId}/${file.name}`;
   await props.context.spHttpClient.post(
-    `${siteUrl}/_api/web/lists/getbytitle('SmoelenboekProfile')/items(${profileId})`,
+    `${props.siteUrl}/_api/web/lists/getbytitle('${props.listName}')/items(${profileId})`,
     SPHttpClient.configurations.v1,
     {
       body: JSON.stringify({ Profilephoto: photoUrl }),

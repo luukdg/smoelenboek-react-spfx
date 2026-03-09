@@ -8,7 +8,7 @@ export const getProfileList = async (
 ): Promise<void> => {
   try {
     const response = await props.context.spHttpClient.get(
-      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items?$select=Id,Email,Personalnote,Skills,Profilephoto`,
+      `${props.siteUrl}/_api/lists/getbytitle('${props.listName}')/items?$select=Id,Email,Personalnote,Skills,Profilephoto`,
       SPHttpClient.configurations.v1,
     );
 

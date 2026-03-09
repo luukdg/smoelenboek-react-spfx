@@ -2,5 +2,5 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  "initialPage": "https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_layouts/workbench.aspx"
+  "initialPage": "https://insidemedia.sharepoint.com/sites/StudioM-Netherlands/_layouts/15/workbench.aspx"
 }

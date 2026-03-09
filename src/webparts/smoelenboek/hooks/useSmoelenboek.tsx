@@ -29,15 +29,17 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       .getClient("3")
       .then((client: MSGraphClientV3) => {
         Promise.all([
-          getColleaguesFromGraph(client).then(async (fetchedColleagues) => {
-            setColleagues(fetchedColleagues);
+          getColleaguesFromGraph(client, props.studiomFilter).then(
+            async (fetchedColleagues) => {
+              setColleagues(fetchedColleagues);
 
-            const userIds = fetchedColleagues
-              .map((c) => c.GraphId ?? "")
-              .filter(Boolean);
-            const presence = await getPresenceByIds(client, userIds);
-            setPresenceMap(presence);
-          }),
+              const userIds = fetchedColleagues
+                .map((c) => c.GraphId ?? "")
+                .filter(Boolean);
+              const presence = await getPresenceByIds(client, userIds);
+              setPresenceMap(presence);
+            },
+          ),
           getProfileList(props, setProfiles),
           getAvailableSkills(props).then(setAvailableSkills),
         ])

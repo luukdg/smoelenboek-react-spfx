@@ -20,7 +20,7 @@ export const saveProfile = async (
   if (profileId) {
     // Update existing profile
     await props.context.spHttpClient.fetch(
-      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items(${profileId})`,
+      `${props.siteUrl}/_api/lists/getbytitle('${props.listName}')/items(${profileId})`,
       SPHttpClient.configurations.v1,
       {
         method: "PATCH",
@@ -37,7 +37,7 @@ export const saveProfile = async (
   } else {
     // Create new profile
     await props.context.spHttpClient.post(
-      `https://insidemedia-my.sharepoint.com/personal/luuk_de_graaf_wppmedia_com/_api/lists/getbytitle('SmoelenboekProfile')/items`,
+      `${props.siteUrl}/_api/lists/getbytitle('${props.listName}')/items`,
       SPHttpClient.configurations.v1,
       {
         headers: {

@@ -11,9 +11,11 @@ import { IReadonlyTheme } from "@microsoft/sp-component-base";
 import * as strings from "SmoelenboekWebPartStrings";
 import Smoelenboek from "./components/Smoelenboek";
 import { ISmoelenboekProps } from "./types/ISmoelenboekProps";
+import { parseListUrl } from "./functions/parseListUrl";
 
 export interface ISmoelenboekWebPartProps {
-  description: string;
+  sharepointList: string;
+  studiomFilter: string;
 }
 
 export default class SmoelenboekWebPart extends BaseClientSideWebPart<ISmoelenboekWebPartProps> {
@@ -21,10 +23,15 @@ export default class SmoelenboekWebPart extends BaseClientSideWebPart<ISmoelenbo
   private _environmentMessage: string = "";
 
   public render(): void {
+    const parsed = this.properties.sharepointList
+      ? parseListUrl(this.properties.sharepointList)
+      : null;
     const element: React.ReactElement<ISmoelenboekProps> = React.createElement(
       Smoelenboek,
       {
-        description: this.properties.description,
+        siteUrl: parsed?.siteUrl ?? "",
+        listName: parsed?.listName ?? "",
+        studiomFilter: this.properties.studiomFilter,
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
@@ -114,15 +121,15 @@ export default class SmoelenboekWebPart extends BaseClientSideWebPart<ISmoelenbo
     return {
       pages: [
         {
-          header: {
-            description: strings.PropertyPaneDescription,
-          },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField("description", {
-                  label: strings.DescriptionFieldLabel,
+                PropertyPaneTextField("sharepointList", {
+                  label: strings.SharepointListLabel,
+                }),
+                PropertyPaneTextField("studiomFilter", {
+                  label: strings.StudioMFilterLabel,
                 }),
               ],
             },

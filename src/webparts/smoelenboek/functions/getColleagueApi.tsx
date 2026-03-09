@@ -3,18 +3,32 @@ import { IColleague } from "../types/colleagueType";
 
 export const getColleaguesFromGraph = async (
   graphClient: MSGraphClientV3,
+  studiomFilter: string,
 ): Promise<IColleague[]> => {
-  const response = await graphClient
-    .api("/users")
-    .version("v1.0")
-    .select(
-      "displayName,mail,jobTitle,department,accountEnabled,mobilePhone,id,officeLocation",
-    )
-    .filter("department eq 'StudioM'")
-    .top(100)
-    .get();
+  const departments = studiomFilter
+    ? studiomFilter
+        .split(",")
+        .map((d) => d.trim())
+        .filter(Boolean)
+    : ["StudioM"];
 
-  return response.value
+  const requests = departments.map((department) =>
+    graphClient
+      .api("/users")
+      .version("v1.0")
+      .select(
+        "displayName,mail,jobTitle,department,accountEnabled,mobilePhone,id,officeLocation",
+      )
+      .filter(`department eq '${department}'`)
+      .top(200)
+      .get(),
+  );
+
+  const results = await Promise.all(requests);
+
+  const allUsers = results.flatMap((r) => r.value);
+
+  return allUsers
     .filter(
       (user: any) =>
         user.officeLocation?.includes("Amsterdam") ||
@@ -30,5 +44,6 @@ export const getColleaguesFromGraph = async (
       Phone: user.mobilePhone ?? "",
       Location: user.officeLocation.split("-")[1]?.trim() ?? "",
       GraphId: user.id,
+      Presence: "",
     }));
 };

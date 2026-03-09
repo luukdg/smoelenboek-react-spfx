@@ -1,7 +1,9 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 
 export interface ISmoelenboekProps {
-  description: string;
+  listName: string;
+  siteUrl: string;
+  studiomFilter: string;
   isDarkTheme: boolean;
   environmentMessage: string;
   hasTeamsContext: boolean;
