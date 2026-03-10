@@ -4,9 +4,13 @@ import ColleagueCard from "./ColleagueCard";
 
 interface IColleagueGridProps {
   colleagues: IColleague[];
+  siteUrl: string;
 }
 
-const ColleagueGrid = ({ colleagues }: IColleagueGridProps): JSX.Element => {
+const ColleagueGrid = ({
+  colleagues,
+  siteUrl,
+}: IColleagueGridProps): JSX.Element => {
   return (
     <div
       style={{
@@ -20,6 +24,7 @@ const ColleagueGrid = ({ colleagues }: IColleagueGridProps): JSX.Element => {
           key={colleague.Name?.EMail}
           colleague={colleague}
           index={index}
+          siteUrl={siteUrl}
         />
       ))}
     </div>

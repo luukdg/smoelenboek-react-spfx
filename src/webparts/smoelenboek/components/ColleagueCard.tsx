@@ -52,11 +52,13 @@ const useStyles = makeStyles({
 interface IColleagueCardProps {
   colleague: IColleague;
   index?: number;
+  siteUrl: string;
 }
 
 const ColleagueCard = ({
   colleague,
   index = 0,
+  siteUrl,
 }: IColleagueCardProps): JSX.Element => {
   const styles = useStyles();
 
@@ -75,7 +77,7 @@ const ColleagueCard = ({
             image={{
               src: colleague.Profilephoto
                 ? parseProfilePhoto(colleague.Profilephoto)
-                : getPhotoUrl(colleague.Name?.EMail ?? ""),
+                : getPhotoUrl(colleague.Name?.EMail ?? "", siteUrl),
             }}
             size={48}
           />
