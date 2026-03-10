@@ -129,16 +129,14 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
           setSelectedLocation={setSelectedLocation}
         />
 
-        {searchActive && (
-          <div>
-            <Divider style={{ margin: "20px 0" }} />
-            <ColleagueGrid
-              key={filterKey}
-              colleagues={filtered}
-              siteUrl={props.siteUrl}
-            />
-          </div>
-        )}
+        <div>
+          <Divider style={{ margin: "20px 0" }} />
+          <ColleagueGrid
+            key={filterKey}
+            colleagues={filtered}
+            siteUrl={props.siteUrl}
+          />
+        </div>
       </div>
     </FluentProvider>
   );

@@ -5,6 +5,7 @@ export const getColleaguesFromGraph = async (
   graphClient: MSGraphClientV3,
   studiomFilter: string,
 ): Promise<IColleague[]> => {
+  console.log("Fetching colleagues from Graph API");
   const departments = studiomFilter
     ? studiomFilter
         .split(",")

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 import { IColleague } from "../types/colleagueType";
 import { IProfile } from "../types/profileTypes";
@@ -24,30 +24,35 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     selectedLocation.length > 0 ||
     search !== "";
 
-  useEffect(() => {
-    props.context.msGraphClientFactory
-      .getClient("3")
-      .then((client: MSGraphClientV3) => {
-        Promise.all([
-          getColleaguesFromGraph(client, props.studiomFilter).then(
-            async (fetchedColleagues) => {
-              setColleagues(fetchedColleagues);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const client = await props.context.msGraphClientFactory.getClient("3");
 
-              const userIds = fetchedColleagues
-                .map((c) => c.GraphId ?? "")
-                .filter(Boolean);
-              const presence = await getPresenceByIds(client, userIds);
-              setPresenceMap(presence);
-            },
-          ),
-          getProfileList(props, setProfiles),
-          getAvailableSkills(props).then(setAvailableSkills),
-        ])
-          .catch(console.error)
-          .finally(() => setLoading(false));
-      })
-      .catch(console.error);
-  }, []);
+      const [fetchedColleagues] = await Promise.all([
+        getColleaguesFromGraph(client, props.studiomFilter),
+        getProfileList(props, setProfiles),
+        getAvailableSkills(props).then(setAvailableSkills),
+      ]);
+
+      setColleagues(fetchedColleagues);
+
+      const userIds = fetchedColleagues
+        .map((c) => c.GraphId ?? "")
+        .filter(Boolean);
+
+      const presence = await getPresenceByIds(client, userIds);
+      setPresenceMap(presence);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [props.studiomFilter]); // ✅ only refetch when filter changes
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const combined = colleagues.map((colleague) => {
     const profile = profiles.find((p) => p.Email === colleague.Name?.EMail);
@@ -60,10 +65,6 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       Presence: presenceMap[colleague.GraphId ?? ""] ?? "unknown",
     };
   });
-
-  useEffect(() => {
-    console.log("Colleagues:", combined);
-  }, [combined]);
 
   const skills = [
     ...new Set(combined.flatMap((c) => c.Skills).filter(Boolean)),
