@@ -2,9 +2,9 @@
 
 ## Summary
 
-Short summary on functionality and used technologies.
+Screenshot of the web part.
 
-[picture of the solution in action, if possible]
+<img src="./img/preview.jpg" width="400" />
 
 ## Used SharePoint Framework Version
 
@@ -52,20 +52,6 @@ Short summary on functionality and used technologies.
 > Include any additional steps as needed.
 
 Other build commands can be listed using `heft --help`.
-
-## Features
-
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
 
 ## References
 
