@@ -5,7 +5,6 @@ import { IProfile } from "../types/profileTypes";
 import { getProfileList } from "../functions/getProfileList";
 import { getAvailableSkills } from "../functions/getAvailableSkills";
 import { getColleaguesFromGraph } from "../functions/getColleagueApi";
-import { MSGraphClientV3 } from "@microsoft/sp-http";
 import { getPresenceByIds } from "../communications/getPresencesByUserId";
 
 export const useSmoelenboek = (props: ISmoelenboekProps) => {
@@ -32,7 +31,6 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
       const [fetchedColleagues] = await Promise.all([
         getColleaguesFromGraph(client, props.studiomFilter),
         getProfileList(props, setProfiles),
-        getAvailableSkills(props).then(setAvailableSkills),
       ]);
 
       setColleagues(fetchedColleagues);
@@ -48,7 +46,7 @@ export const useSmoelenboek = (props: ISmoelenboekProps) => {
     } finally {
       setLoading(false);
     }
-  }, [props.studiomFilter]); // ✅ only refetch when filter changes
+  }, [props.studiomFilter]); // only refetch when filter changes
 
   useEffect(() => {
     fetchData();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -13,11 +13,14 @@ import {
   Checkbox,
   FluentProvider,
   Text,
+  Badge,
+  Input,
 } from "@fluentui/react-components";
-import { EditRegular } from "@fluentui/react-icons";
+import { EditRegular, ArrowEnterRegular } from "@fluentui/react-icons";
 import { ISmoelenboekProps } from "../types/ISmoelenboekProps";
 import { saveProfile } from "../functions/saveProfile";
 import { uploadProfilePhoto } from "../functions/uploadProfilePhoto";
+import { TextField } from "@fluentui/react";
 
 interface IEditProfileDialogProps {
   theme: any;
@@ -50,6 +53,7 @@ const EditProfileDialog = ({
   const [saving, setSaving] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>(currentPhoto || "");
+  const [newSkill, setNewSkill] = useState("");
 
   const handleSave = async (): Promise<void> => {
     setSaving(true);
@@ -74,14 +78,9 @@ const EditProfileDialog = ({
     const file = e.target.files?.[0];
     if (file) {
       setPhotoFile(file);
-      setPhotoPreview(URL.createObjectURL(file)); // preview before saving
+      setPhotoPreview(URL.createObjectURL(file));
     }
   };
-
-  useEffect(() => {
-    setNote(currentNote || "");
-    setSelectedSkills(currentSkills || []);
-  }, [currentNote, currentSkills]);
 
   return (
     <FluentProvider theme={theme}>
@@ -140,14 +139,46 @@ const EditProfileDialog = ({
                       marginBottom: "8px",
                     }}
                   >
-                    {availableSkills.map((skill, i) => (
-                      <Checkbox
-                        key={i}
-                        label={skill}
-                        checked={selectedSkills.includes(skill)}
-                        onChange={() => toggleSkill(skill)}
-                      />
-                    ))}
+                    <Input
+                      placeholder="Add a skill..."
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && newSkill.trim()) {
+                          setSelectedSkills((prev) => [
+                            ...prev,
+                            newSkill.trim().toLowerCase(),
+                          ]);
+                          setNewSkill("");
+                        }
+                      }}
+                      contentAfter={
+                        <ArrowEnterRegular
+                          style={{
+                            cursor: "pointer",
+                            color: newSkill ? "inherit" : "#bdbdbd",
+                          }}
+                          onClick={() => {
+                            if (newSkill.trim()) {
+                              setSelectedSkills((prev) => [
+                                ...prev,
+                                newSkill.trim().toLowerCase(),
+                              ]);
+                              setNewSkill("");
+                            }
+                          }}
+                        />
+                      }
+                    />
+                    <div
+                      style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}
+                    >
+                      {/* {selectedSkills?.map((skill, i) => (
+                        <Badge key={i} appearance="filled">
+                          {skill}
+                        </Badge>
+                      ))} */}
+                    </div>
                   </div>
                 </div>
               </div>

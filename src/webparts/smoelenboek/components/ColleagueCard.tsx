@@ -115,11 +115,11 @@ const ColleagueCard = ({
       )}
       <CardFooter>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-          {colleague.Skills?.map((skill, i) => (
+          {/* {colleague.Skills?.map((skill, i) => (
             <Badge key={i} appearance="filled">
               {skill}
             </Badge>
-          ))}
+          ))} */}
         </div>
       </CardFooter>
     </Card>

@@ -17,6 +17,7 @@ import EditProfileDialog from "./editProfileDialog";
 import { useSmoelenboek } from "../hooks/useSmoelenboek";
 import logoLight from "../assets/StudioM_WPPMediaBrand_black.png";
 import logoDark from "../assets/StudioM_WPPMediaBrand_white.png";
+import { useEffect } from "react";
 
 const useStyles = makeStyles({
   mainTitle: {
@@ -70,6 +71,10 @@ const Smoelenboek = (props: ISmoelenboekProps): JSX.Element => {
   const logo = props.isDarkTheme ? logoDark : logoLight;
 
   const styles = useStyles();
+
+  useEffect(() => {
+    console.log("profile:", myProfile);
+  }, [myProfile]);
 
   if (loading) {
     return (
